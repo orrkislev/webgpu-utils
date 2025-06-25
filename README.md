@@ -11,42 +11,32 @@ npm install webgpu-utils
 ## Features
 
 - **Rendering Utilities**: Easily create render and compute passes
-- **Shader Helpers**: Noise functions, camera utilities, and ray casting
 - **Data Structures**: Typed struct system for efficient GPU buffer management
 - **Math Utilities**: Helper functions for 2D/3D graphics and random number generation
+- **Shader Helpers**: Noise functions, camera utilities, and ray casting
 
 ## Basic Usage
 
 ```javascript
-import { initCanvas, RenderPass, Texture, runPasses } from 'webgpu-utils';
+import { init, wgsl, renderPass, ComputePass, runPasses } from '../../dist/webgpu-utils.esm.js'
 
-// Initialize WebGPU canvas
-await initCanvas();
+await init()
 
-// Create a texture
-const texture = new Texture('myTexture', width, height);
+const code = wgsl`
+    let pos = vec2<u32>(id.x, id.y);
+    let color = vec4<f32>(f32(pos.x) / width, f32(pos.y) / height, .5, 1.0);
+    textureStore(renderTxtr, pos, color);
+`
 
-// Create a render pass with a shader
-const renderPass = new RenderPass(texture, `
-  // Your WGSL shader code here
-  @vertex fn vs(@builtin(vertex_index) vertexIndex : u32) -> @builtin(position) vec4f {
-    // ...
-  }
-  
-  @fragment fn fs() -> @location(0) vec4f {
-    // ...
-  }
-`);
-
-// Run the render pass
-runPasses([renderPass]);
+const pass = ComputePass.texture(code, [])
+runPasses([pass, renderPass])
 ```
 
 ## Core Components
 
 ### Canvas and Device Setup
 
-- `initCanvas()`: Initialize WebGPU canvas and device
+- `await init()`: Initialize WebGPU canvas and device
 
 ### Pass Types
 
@@ -59,6 +49,19 @@ runPasses([renderPass]);
 - `Buffer`: Create and manage WebGPU buffers
 - `Struct`: Typed data structure for GPU buffers
 
+### Named Buffers and Textures
+
+- `renderTxtr`: The main texture used for rendering the scene.
+- `feedbackTxtr`: A texture used for feedback in the rendering process.
+- `mouse`: A Buffer that stores mouse position data.
+- `time`: A Buffer that stores time data for animations.
+
+### Named Passes
+
+- `renderPass`: The main render pass that outputs to the canvas.
+- `clearPass`: A pass that clears the render texture.
+- `matchPass`: A pass that draws the current frame to the feedback texture.
+
 ### Shader Utilities
 
 - Noise functions (2D and 3D)
@@ -67,45 +70,7 @@ runPasses([renderPass]);
 
 ## Examples
 
-### Creating a Simple Shader
 
-```javascript
-import { initCanvas, runPasses, RenderPass, Texture } from 'webgpu-utils';
-
-await initCanvas();
-
-// Create a texture
-const texture = new Texture('output', width, height);
-
-// Create a simple render pass that fills the screen with a gradient
-const renderPass = new RenderPass(texture, `
-  struct VertexOutput {
-    @builtin(position) position: vec4f,
-    @location(0) uv: vec2f,
-  };
-
-  @vertex fn vs(@builtin(vertex_index) vertexIndex : u32) -> VertexOutput {
-    let pos = array(
-      vec2f(-1.0, -1.0), vec2f(1.0, -1.0),
-      vec2f(-1.0, 1.0), vec2f(-1.0, 1.0),
-      vec2f(1.0, -1.0), vec2f(1.0, 1.0),
-    );
-
-    var output: VertexOutput;
-    let xy = pos[vertexIndex];
-    output.position = vec4f(xy, 0.0, 1.0);
-    output.uv = vec2f((xy.x + 1.0) / 2.0, 1.0-(xy.y + 1.0) / 2.0);
-    return output;
-  }
-
-  @fragment fn fs(input: VertexOutput) -> @location(0) vec4f {
-    return vec4f(input.uv, 0.5, 1.0);
-  }
-`);
-
-// Run the render pass
-runPasses([renderPass]);
-```
 
 ## License
 

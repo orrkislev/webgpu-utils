@@ -94,6 +94,60 @@
             z-index: -1;
             background-color: black;
         }
+
+        .npm {
+            font-size: .8rem;
+            color: #fff;
+            background: #333;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-family: monospace;
+            cursor: pointer;
+        }
+        .npm:hover {
+            background: #fff;
+            transform: translateY(-2px);
+            color:#007acc
+        }
+
+        .github{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #24292e;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .github:hover {
+            background: #161b22;
+            transform: translateY(-2px);
+        }
+        .github-title {
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        .github-text {
+            font-size: 0.9rem;
+            color: #c9d1d9;
+        }
+        @media (max-width: 600px) {
+            .npm, .github {
+                width: 100%;
+                text-align: center;
+                padding: 12px;
+            }
+            .npm {
+                font-size: 1rem;
+            }
+            .github {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -128,6 +182,16 @@
                 <div>There are more features, so - more examples will be added someday.</div>
             </div>
         </div>
+
+        <div style="display: flex; flex-direction: column; gap: 18px; align-items: center; margin-top: 30px;">
+                <div class="npm" onclick="navigator.clipboard.writeText('npm install @orrkislev/webgpu-utils'); this.querySelector('.example-desc').textContent = 'Copied!'; setTimeout(()=>this.querySelector('.example-desc').textContent='npm install @orrkislev/webgpu-utils', 1200);">
+                    <span>npm install @orrkislev/webgpu-utils</span>
+                </div>
+                <a href="https://github.com/orrkislev/webgpu-utils" target="_blank" rel="noopener" class="github">
+                    <span class="github-title">GitHub</span>
+                    <span class="github-text">View source & contribute</span>
+                </a>
+            </div>
     </div>
 </body>
 </html>

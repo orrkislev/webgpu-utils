@@ -1,0 +1,41 @@
+# Development files
+.git/
+.github/
+.vscode/
+.idea/
+.DS_Store
+.editorconfig
+.eslintrc.js
+.eslintignore
+.gitignore
+.babelrc
+
+# Test files
+tests/
+coverage/
+jest.config.js
+jest.setup.js
+
+# Examples (optional whether to include them or not)
+# examples/
+
+# Build system
+rollup.config.js
+babel.config.json
+.travis.yml
+
+# Source maps
+*.map
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo

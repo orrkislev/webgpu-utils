@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "webgpu-utils feedback example"
+  },
+  "intro": {
+    "description": "This is a simple WebGPU example demonstrating real-time compute shaders with mouse interaction.",
+    "features": [
+      {
+        "label": "Mouse",
+        "description": "The shader reacts to mouse movements, creating a pulsing circle that follows the cursor."
+      },
+      {
+        "label": "Time", 
+        "description": "The shader uses time to create a dynamic effect, making the circle pulse over time."
+      },
+      {
+        "label": "Feedback",
+        "description": "The shader uses a feedback texture to create a trail effect, allowing the circle to leave a fading trail behind."
+      }
+    ]
+  },
+  "codeExamples": [
+    {
+      "code": "import { init, wgsl, matchPass, renderPass, ComputePass, runPasses } from '../dist/webgpu-utils.esm.js'",
+      "explanation": "webgpu-utils works with ES module imports!"
+    },
+    {
+      "code": "let pass\nexport async function run() {",
+      "explanation": "Setting up our main function and pass variable"
+    },
+    {
+      "code": "await init({\n    mouse: true,\n    time: true,\n    feedback: true,\n})",
+      "explanation": "Initialize WebGPU with mouse tracking, time uniforms, and feedback texture support"
+    },
+    {
+      "code": "const code = wgsl`\n    let pos = vec2<u32>(id.x, id.y);\n\n    var color = textureLoad(feedbackTxtr, pos, 0);\n    color -= 0.01;\n\n    let toMouse = mouse.pos - vec2<f32>(f32(id.x), f32(id.y));\n    let r = sin(time * 2) * 30.0 + 60.0;\n    if (length(toMouse) < r) {\n        color += (1.0-length(toMouse) / r) * 0.1;\n    }\n\n    textureStore(renderTxtr, pos, color);\n`",
+      "explanation": "WGSL compute shader that creates a pulsing circle that follows your mouse cursor with fade trails"
+    },
+    {
+      "code": "    pass = ComputePass.texture(code, [])",
+      "explanation": "Create a compute pass with our shader code and no additional uniforms"
+    },
+    {
+      "code": "    animate()\n}\n\nasync function animate() {\n    runPasses([matchPass, pass, renderPass])\n    requestAnimationFrame(animate)\n}\n\nrun()",
+      "explanation": "Animation loop that runs the compute shader each frame. matchPass handles feedback, renderPass displays the result"
+    }
+  ]
+}

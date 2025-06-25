@@ -1,0 +1,95 @@
+html, body { 
+    height: 100%; 
+    margin: 0; 
+    padding: 0; 
+    overflow: hidden; 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+#container {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+}
+
+#leftSide {
+    width: 50%;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+    background: #fafafa;
+}
+
+#content {
+    width: 50%;
+    background: #000;
+}
+
+.code-example {
+    display: flex;
+    width: 100%;
+    margin-bottom: 0.5em;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.code-side {
+    width: 70% !important;
+    background: #2d2d2d;
+    position: relative;
+}
+
+.code-side pre {
+    margin: 0 !important;
+    padding: 15px !important;
+    background: transparent !important;
+    overflow-x: auto;
+}
+
+.code-side code {
+    background: transparent !important;
+    padding: 0 !important;
+    font-size: 0.85em !important;
+    line-height: 1.4;
+}
+
+.explanation-side {
+    width: 25% !important;
+    background: white;
+    color: #444;
+    padding: 15px;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    border-left: 3px solid #007acc;
+}
+
+h2 {
+    color: #333;
+    margin-top: 0;
+}
+
+.intro {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.intro ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.intro li {
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.logo-image{
+    width: 100px;
+    height: auto;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "webgpu-utils 100k particles example"
+  },
+  "intro": {
+    "description": "This example demonstrates how to use structured buffers and compute shaders to simulate and render a large number of particles in real-time.",
+    "features": [
+      {
+        "label": "Struct",
+        "description": "Defines a structured data type for particles, including position and velocity, to be used in compute shaders."
+      },
+      {
+        "label": "Buffer",
+        "description": "Creates and manages GPU buffers to store particle data, allowing efficient access and updates in compute shaders."
+      },
+      {
+        "label": "clearPass",
+        "description": "A compute pass that clears the render texture before rendering particles, ensuring a clean slate for each frame."
+      }
+    ]
+  },
+  "codeExamples": [
+    {
+      "code": "await init()",
+      "explanation": "Initialize WebGPU and attach the canvas to the container."
+    },
+    {
+      "code": "const particleStruct = new Struct('Particle',\n     [ { name: 'pos', type: type_vec2 },\n     { name: 'vel', type: type_vec2 }\n])",
+      "explanation": "Define a struct for particle data with position and velocity."
+    },
+    {
+      "code": "const totalParticles = 100000\nconst particles = []\nfor (let i = 0; i < totalParticles; i++) {\n  const newParticle = particleStruct.object()\n  newParticle.pos = {x:random(width * .4, width * .6), y:random(height * .4, height * .6)}\n  newParticle.vel = {x:random(-100, 100), y:random(-100, 100)}\n  particles.push(newParticle)\n}\nconst particlesBuffer = particleStruct.createBuffer('particles', particles)",
+      "explanation": "Create and initialize 100,000 particles with random positions and velocities, then upload them to a GPU buffer."
+    },
+    {
+      "code": "const particlePassCode = wgsl`\n  var p = particles[id.x];\n  p.pos += p.vel * 0.1;\n  if (p.pos.x > width || p.pos.x < 0.0) {\n    p.vel.x *= -1.0;\n  }\n  if (p.pos.y > height || p.pos.y < 0.0) {\n    p.vel.y *= -1.0;\n  }\n  particles[id.x] = p;\n  textureStore(renderTxtr, vec2<u32>(u32(p.pos.x), u32(p.pos.y)), vec4f(1.0));\n`",
+      "explanation": "WGSL compute shader that updates particle positions, handles boundary collisions, and renders each particle to the output texture."
+    },
+    {
+      "code": "particlePass = new ComputePass(particlePassCode, [particlesBuffer], totalParticles)",
+      "explanation": "Create a compute pass for updating and rendering all particles."
+    },
+    {
+      "code": "runPasses([clearPass, particlePass, renderPass])",
+      "explanation": "Run the clear, compute, and render passes each frame to animate the particles."
+    }
+  ]
+}

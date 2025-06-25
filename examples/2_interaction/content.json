@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "webgpu-utils interaction example"
+  },
+  "intro": {
+    "description": "Demonstrates mouse interaction with a compute shader using webgpu-utils. The shader colors pixels near the mouse, and clicking changes the color.",
+    "features": [
+      {
+        "label": "Mouse Input",
+        "description": "Enables mouse position and button state in the shader via the `mouse` option."
+      },
+      {
+        "label": "Interactive Compute Shader",
+        "description": "Shader logic responds to mouse proximity and button presses to alter pixel colors."
+      },
+      {
+        "label": "Animation Loop",
+        "description": "Uses `requestAnimationFrame` to continuously update the output based on user input."
+      }
+    ]
+  },
+  "codeExamples": [
+    {
+      "code": "import { init, wgsl, renderPass, ComputePass, runPasses } from '../../../dist/webgpu-utils.esm.js'",
+      "explanation": "Importing necessary functions and classes from webgpu-utils library."
+    },
+    {
+      "code": "let pass\nexport async function run() {",
+      "explanation": "Declare the pass variable and define the main async run function."
+    },
+    {
+      "code": "    await init({\n        mouse: true,\n    })",
+      "explanation": "Initialize WebGPU with mouse input enabled for interaction."
+    },
+    {
+      "code": "    const code = wgsl`\n        let pos = vec2<u32>(id.x, id.y);\n\n        let toMouse = mouse.pos - vec2<f32>(f32(id.x), f32(id.y));\n        if (length(toMouse) < 20.0) {\n            var color = vec4<f32>(f32(pos.x) / width, f32(pos.y) / height, .5, 1.0);\n            if (mouse.button == 0) {\n                color = vec4<f32>(0.0, 0.0, 0.0, 1.0);\n            }\n            textureStore(renderTxtr, pos, color);\n        }\n    `",
+      "explanation": "WGSL compute shader that colors pixels near the mouse, and sets them to black when the mouse button is pressed."
+    },
+    {
+      "code": "    pass = ComputePass.texture(code, [])\n\n    animate()",
+      "explanation": "Create the compute pass and start the animation loop."
+    },
+    {
+      "code": "}\n\nfunction animate() {\n    runPasses([pass, renderPass])\n    requestAnimationFrame(animate)\n}\n\nrun()",
+      "explanation": "Animation function runs the passes and schedules the next frame."
+    }
+  ]
+}

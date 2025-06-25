@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>webgpu-utils – Generative Art Library</title>
+    <link rel="stylesheet" href="examples.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .landing-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+        }
+        .landing-logo {
+            width: 140px;
+            height: auto;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            border-radius: 16px;
+            background: white;
+            padding: 16px;
+        }
+        .landing-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #22223b;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+        .landing-desc {
+            font-size: 1.2rem;
+            color: #444;
+            margin-bottom: 32px;
+            max-width: 480px;
+            text-align: center;
+        }
+        .examples-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .example-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 20px 32px;
+            text-decoration: none;
+            color: #22223b;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .example-link:hover {
+            box-shadow: 0 6px 24px rgba(0,122,204,0.15);
+            transform: translateY(-2px) scale(1.03);
+            color: #007acc;
+        }
+        .example-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .example-desc {
+            font-size: 0.98rem;
+            color: #666;
+        }
+        @media (max-width: 600px) {
+            .landing-title { font-size: 2rem; }
+            .landing-desc { font-size: 1rem; }
+            .examples-list { flex-direction: column; gap: 14px; }
+            .example-link { padding: 16px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="landing-container">
+        <img src="logo.png" alt="webgpu-utils logo" class="landing-logo">
+        <div class="landing-title">webgpu-utils</div>
+        <div class="landing-desc">
+            A lightweight, modular JavaScript library for generative art and creative coding with WebGPU.<br>
+            Explore interactive examples and learn how to harness the power of modern GPU rendering in the browser.
+        </div>
+        <div class="examples-list">
+            <a class="example-link" href="1_simple/index.html">
+                <span class="example-title">1. Minimal</span>
+                <span class="example-desc">Minimal WebGPU setup.</span>
+            </a>
+            <a class="example-link" href="2_interaction/index.html">
+                <span class="example-title">2. Interaction</span>
+                <span class="example-desc">Mouse input with WebGPU.</span>
+            </a>
+            <a class="example-link" href="3_feedback/index.html">
+                <span class="example-title">3. Feedback</span>
+                <span class="example-desc">Feedback loops rendering.</span>
+            </a>
+            <a class="example-link" href="4_buffer/index.html">
+                <span class="example-title">4. Buffer</span>
+                <span class="example-desc">Buffer with 100,000 particles.</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

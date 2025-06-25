@@ -1,0 +1,51 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+jspm_packages/
+
+# Build output
+# dist/
+build/
+
+# Coverage directory
+coverage/
+
+# Misc
+.DS_Store
+.env
+.env.*
+
+# Test output
+*.tsbuildinfo
+
+# VSCode settings
+.vscode/
+
+# Mac system files
+*.DS_Store
+
+# Rollup cache
+.rollup.cache/
+
+# Jest coverage
+coverage/
+
+# Babel cache
+.babel_cache/
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# Example output
+examples/**/*.js
+!examples/**/*.example.js

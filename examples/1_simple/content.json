@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "webgpu-utils basic example"
+  },
+  "intro": {
+    "description": "The basics of using webgpu-utils to run a shader and render its output.",
+    "features": [
+      {
+        "label": "wgsl literal",
+        "description": "Use the `wgsl` tagged template literal to write WGSL shaders directly in JavaScript."
+      },
+      {
+        "label": "ComputePass.texture",
+        "description": "Run a compute shader to color pixels based on their position."
+      },
+      {
+        "label": "renderPass",
+        "description": "Render the output of the compute shader to a texture."
+      }
+    ]
+  },
+  "codeExamples": [
+    {
+      "code": "import { init, wgsl, renderPass, ComputePass, runPasses } from '../../../dist/webgpu-utils.esm.js'",
+      "explanation": "Importing necessary functions and classes from webgpu-utils library"
+    },
+    {
+      "code": "export async function run() {",
+      "explanation": ""
+    },
+    {
+      "code": "    await init()",
+      "explanation": "Initialize WebGPU, create a canvas, and set up the rendering context"
+    },
+    {
+      "code": "    const code = wgsl`\n       let pos = vec2<u32>(id.x, id.y);\n       let color = vec4<f32>(f32(pos.x) / width, f32(pos.y) / height, .5, 1.0);\n       textureStore(renderTxtr, pos, color);\n    `",
+      "explanation": "WGSL compute shader that colors each pixel based on its position"
+    },
+    {
+      "code": "    const pass = ComputePass.texture(code, [])\n    runPasses([pass, renderPass])",
+      "explanation": "Create a compute pass with our shader code and run it with the render pass"
+    },
+    {
+      "code": "}\nrun()",
+      "explanation": ""
+    }
+  ]
+}

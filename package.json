@@ -1,6 +1,6 @@
 {
   "name": "@orrkislev/webgpu-utils",
-  "version": "0.1.0",
+  "version": "0.1.01",
   "description": "Utility functions for WebGPU development with a focus on generative art",
   "main": "index.js",
   "scripts": {

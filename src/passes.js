@@ -1,6 +1,7 @@
 // RenderPass and ComputePass classes extracted from render.js
 
 import { device, ctx, canvasPresentationFormat, width, height } from './canvas.js';
+import { noiseBuffer } from './noise.js';
 import { renderTxtr, feedbackTxtr } from './render_passes.js';
 import { mouseBuffer, timeBuffer } from './utilities.js';
 
@@ -70,6 +71,10 @@ export class ComputePass {
                 }
             }
         });
+
+        if (/\bnoise2?\s*\(/.test(code)) {
+            if (noiseBuffer) bindings.push(noiseBuffer)
+        }
 
 
         if (bindings.some(b => Array.isArray(b))) {

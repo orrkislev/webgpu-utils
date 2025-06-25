@@ -5,20 +5,20 @@
 
 import { Buffer } from './core.js';
 
-let noiseBuffer = null;
+export let noiseBuffer;
 
 /**
  * Get WGSL code for noise functions
  * @returns {string} WGSL noise functions code
  */
 export function getNoiseCode() {
-    // Create a noise offset buffer if it doesn't exist
-    if (!noiseBuffer) {
-        noiseBuffer = new Buffer([Math.random() * 1000, Math.random() * 1000, Math.random() * 1000], 'noiseOffset');
-    }
+  // Create a noise offset buffer if it doesn't exist
+  if (!noiseBuffer) {
+    noiseBuffer = new Buffer('noiseOffset', [Math.random() * 1000, Math.random() * 1000, Math.random() * 1000], 'noiseOffset');
+  }
 
-    // Combine noise function implementations
-    return `
+  // Combine noise function implementations
+  return `
     ${wgslNoise}
     ${wgslNoise2}
     `;
@@ -42,8 +42,8 @@ fn noise(p: f32) -> f32 {
  * 2D simplex noise implementation for WGSL
  * @type {string}
  */
-export const wgslNoise2 = 
-`fn mod289(x: vec2<f32>) -> vec2<f32> {return x - floor(x * (1. / 289.)) * 289.;}
+export const wgslNoise2 =
+  `fn mod289(x: vec2<f32>) -> vec2<f32> {return x - floor(x * (1. / 289.)) * 289.;}
 fn mod289_3(x: vec3<f32>) -> vec3<f32> {return x - floor(x * (1. / 289.)) * 289.;}
 fn permute3(x: vec3<f32>) -> vec3<f32> {return mod289_3(((x * 34.) + 1.) * x);}
 fn noise2(v: vec2<f32>) -> f32 {
@@ -202,12 +202,12 @@ fn voronoi(uv: vec2<f32>, scale: f32, seed: f32) -> f32 {
 }
 `;
 
-export default { 
-    getNoiseCode, 
-    wgslNoise, 
-    wgslNoise2, 
-    wgslNoise3, 
-    wgslFBM, 
-    wgslVoronoi,
-    noiseBuffer 
+export default {
+  getNoiseCode,
+  wgslNoise,
+  wgslNoise2,
+  wgslNoise3,
+  wgslFBM,
+  wgslVoronoi,
+  noiseBuffer
 };

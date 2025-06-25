@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "webgpu-utils - Noise & Controls"
+  },
+  "intro": {
+    "description": "",
+    "features": [
+      {
+        "label": "new Struct()",
+        "description": "Define a custom structure for controls"
+      },
+      {
+        "label": "struct.object() and struct.createBuffer()",
+        "description": "Create an object from the structure and a buffer to hold its data"
+      },
+      {
+        "label": "noise() and noise2()",
+        "description": "built-in functions to generate noise values in shaders."
+      },
+      {
+        "label": "buffer.update()",
+        "description": "Update the controls buffer dynamically based on GUI input."
+      }
+    ]
+  },
+  "codeExamples": [
+    {
+      "code": "const controlsStruct = new Struct('Controls', [\n    { name: 'noiseScale', type: type_f32 },\n    { name: 'threshold', type: type_f32 },\n    { name: 'useThreshold', type: type_f32 }\n])\nconst controls = controlsStruct.object()\ncontrols.noiseScale = 10.0;\ncontrols.threshold = 0.5;\ncontrols.useThreshold = 0.0;\nconst controlsBuffer = controlsStruct.createBuffer('controls', controls)",
+      "explanation": "Define a structure for controls and create a buffer to hold them"
+    },
+    {
+      "code": "const code = wgsl`\n    let pos = vec2<u32>(id.x, id.y);\n    var v = noise2(vec2<f32>(f32(pos.x) / controls.noiseScale, f32(pos.y) / controls.noiseScale));\n    v = (v + 1.0) * 0.5;\n    if (controls.useThreshold == 1.0){\n        if (v < controls.threshold) {\n            v = 0.0;\n        } else {\n            v = 1.0;\n        }\n    }\n    let color = vec4<f32>(v, v, v, 1.0);\n    textureStore(renderTxtr, pos, color);\n`",
+      "explanation": "WGSL compute shader using noise2 and the controls buffer"
+    },
+    {
+      "code": "const pass = ComputePass.texture(code, [controlsBuffer])\nrunPasses([pass, renderPass])`",
+      "explanation": "Create a compute pass with our shader code and controls buffer"
+    },
+    {
+      "code": "const gui = new GUI();\ngui.add(controls, 'run').name('Run Shader');\ngui.add(controls, 'reset').name('Reset Controls');\ngui.add(controls, 'noiseScale', 1, 100).step(1);\n",
+      "explanation": "Create a GUI using lil.gui"
+    },
+    {
+      "code": "gui.onChange(_ => {\n    controlsBuffer.update([controls.noiseScale, controls.threshold, controls.useThreshold ? 1.0 : 0.0]);\n    runPasses([pass, renderPass])\n});",
+      "explanation": "Update the controls buffer and re-run the passes when GUI controls change"
+    }
+  ]
+}

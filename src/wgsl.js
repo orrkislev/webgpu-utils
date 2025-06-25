@@ -1,6 +1,7 @@
 // wgsl.js - WGSL template literal with builder pattern
 
 import { height, width } from './canvas.js';
+import { getNoiseCode } from './noise.js';
 
 class WGSLParser {
   constructor(code) {
@@ -354,6 +355,14 @@ export function wgsl(strings, ...values) {
   // Replace width and height placeholders
   code = code.replace(/\bwidth\b/g, width.toFixed(2));
   code = code.replace(/\bheight\b/g, height.toFixed(2));
+
+  // If code uses noise or noise2, inject the noise function implementation
+  if (/\bnoise2?\s*\(/.test(code)) {
+    // Only add if not already present
+    if (!/fn\s+noise\s*\(/.test(code)) {
+      code = getNoiseCode() + '\n\n' + code;
+    }
+  }
 
   // Remove leading/trailing whitespace but preserve internal structure
   code = code.trim();

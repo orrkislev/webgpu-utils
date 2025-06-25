@@ -1,5 +1,5 @@
 {
-  "name": "webgpu-utils",
+  "name": "@orrkislev/webgpu-utils",
   "version": "0.1.0",
   "description": "Utility functions for WebGPU development with a focus on generative art",
   "main": "index.js",
@@ -21,12 +21,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/webgpu-utils"
+    "url": "https://github.com/orrkislev/webgpu-utils"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/webgpu-utils/issues"
+    "url": "https://github.com/orrkislev/webgpu-utils/issues"
   },
-  "homepage": "https://github.com/yourusername/webgpu-utils#readme",
+  "homepage": "https://orrkislev.github.io/webgpu-utils/",
   "devDependencies": {
     "@babel/core": "^7.22.5",
     "@babel/preset-env": "^7.22.5",

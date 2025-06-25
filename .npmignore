@@ -16,8 +16,8 @@ coverage/
 jest.config.js
 jest.setup.js
 
-# Examples (optional whether to include them or not)
-# examples/
+# Documentation
+docs/
 
 # Build system
 rollup.config.js

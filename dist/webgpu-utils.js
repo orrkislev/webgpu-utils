@@ -364,9 +364,9 @@
               mouseIsDown
           ]));
       };
-      exports.canvas.addEventListener('mousemove', mouseEvent);
-      exports.canvas.addEventListener('mousedown', mouseEvent);
-      exports.canvas.addEventListener('mouseup', mouseEvent);
+      document.addEventListener('mousemove', mouseEvent);
+      document.addEventListener('mousedown', mouseEvent);
+      document.addEventListener('mouseup', mouseEvent);
   }
 
 

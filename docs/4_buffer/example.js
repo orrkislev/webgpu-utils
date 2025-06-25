@@ -1,4 +1,4 @@
-import { init, wgsl, renderPass, ComputePass, clearPass, runPasses, Struct, random, width, height, type_vec2, createClearPass } from '../../dist/webgpu-utils.esm.js'
+import { init, wgsl, renderPass, ComputePass, clearPass, runPasses, Struct, random, width, height, type_vec2 } from '../../dist/webgpu-utils.esm.js'
 
 let particlePass
 export async function run() {

@@ -358,9 +358,9 @@ function createMouseBuffer() {
             mouseIsDown
         ]));
     };
-    canvas.addEventListener('mousemove', mouseEvent);
-    canvas.addEventListener('mousedown', mouseEvent);
-    canvas.addEventListener('mouseup', mouseEvent);
+    document.addEventListener('mousemove', mouseEvent);
+    document.addEventListener('mousedown', mouseEvent);
+    document.addEventListener('mouseup', mouseEvent);
 }
 
 

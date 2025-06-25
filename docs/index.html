@@ -13,6 +13,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            user-select: none;
         }
         .landing-container {
             display: flex;
@@ -33,13 +34,13 @@
         .landing-title {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #22223b;
+            color: #fff;
             margin-bottom: 12px;
             letter-spacing: 1px;
         }
         .landing-desc {
             font-size: 1.2rem;
-            color: #444;
+            color: #ddd;
             margin-bottom: 32px;
             max-width: 480px;
             text-align: center;
@@ -84,9 +85,21 @@
             .examples-list { flex-direction: column; gap: 14px; }
             .example-link { padding: 16px 12px; }
         }
+        #bg{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: pink;
+        }
     </style>
 </head>
 <body>
+    <div id="bg"></div>
+    <script type="module" src="fluid/main.js"></script>
+
     <div class="landing-container">
         <img src="logo.png" alt="webgpu-utils logo" class="landing-logo">
         <div class="landing-title">webgpu-utils</div>
@@ -111,6 +124,9 @@
                 <span class="example-title">4. Buffer</span>
                 <span class="example-desc">Buffer with 100,000 particles.</span>
             </a>
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 18px; color: #bbb; font-size: .8rem;">
+                <div>There are more features, so - more examples will be added someday.</div>
+            </div>
         </div>
     </div>
 </body>

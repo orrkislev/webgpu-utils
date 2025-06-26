@@ -29,7 +29,7 @@
       "explanation": "Define a structure for controls and create a buffer to hold them"
     },
     {
-      "code": "const code = wgsl`\n    let pos = vec2<u32>(id.x, id.y);\n    var v = noise2(vec2<f32>(f32(pos.x) / controls.noiseScale, f32(pos.y) / controls.noiseScale));\n    v = (v + 1.0) * 0.5;\n    if (controls.useThreshold == 1.0){\n        if (v < controls.threshold) {\n            v = 0.0;\n        } else {\n            v = 1.0;\n        }\n    }\n    let color = vec4<f32>(v, v, v, 1.0);\n    textureStore(renderTxtr, pos, color);\n`",
+      "code": "const code = wgsl`\n    let pos = vec2<u32>(id.x, id.y);\n    var v = noise2(vec2<f32>(f32(pos.x) / controls.noiseScale, f32(pos.y) / controls.noiseScale));\n    v = (v + 1.0) * 0.5;\n    if (controls.useThreshold == 1.0){\n        v = step(controls.threshold, v);\n    }\n    let color = vec4<f32>(v, v, v, 1.0);\n    textureStore(renderTxtr, pos, color);\n`",
       "explanation": "WGSL compute shader using noise2 and the controls buffer"
     },
     {

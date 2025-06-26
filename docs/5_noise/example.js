@@ -22,11 +22,7 @@ export async function run() {
         var v = noise2(vec2<f32>(f32(pos.x) / controls.noiseScale, f32(pos.y) / controls.noiseScale));
         v = (v + 1.0) * 0.5;
         if (controls.useThreshold == 1.0){
-            if (v < controls.threshold) {
-                v = 0.0;
-            } else {
-                v = 1.0;
-            }
+            v = step(controls.threshold, v);
         }
         let color = vec4<f32>(v, v, v, 1.0);
         textureStore(renderTxtr, pos, color);
@@ -37,8 +33,8 @@ export async function run() {
     
     const gui = new GUI();
     gui.add(controls, 'noiseScale', 1, 100).step(1);
-    gui.add(controls, 'threshold', 0, 1).step(0.01);
     gui.add(controls, 'useThreshold', 0, 1).step(1).name('Use Threshold');
+    gui.add(controls, 'threshold', 0, 1).step(0.01);
 
     gui.onChange(_ => {
         controlsBuffer.update([controls.noiseScale, controls.threshold, controls.useThreshold ? 1.0 : 0.0]);

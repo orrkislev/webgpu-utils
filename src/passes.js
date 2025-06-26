@@ -72,7 +72,7 @@ export class ComputePass {
             }
         });
 
-        if (/\bnoise2?\s*\(/.test(code)) {
+        if (/\bnoise\s*\(|\bnoise2\s*\(|\bnoise3\s*\(/.test(code)) {
             if (noiseBuffer) bindings.push(noiseBuffer)
         }
 

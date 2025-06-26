@@ -25,6 +25,7 @@
     return `
     ${wgslNoise}
     ${wgslNoise2}
+    ${wgslNoise3}
     `;
   }
 
@@ -34,7 +35,7 @@
    */
   const wgslNoise = `
 fn rand(n: f32) -> f32 { return fract(sin(438.347 * n / 10000)); }
-fn noise(p: f32) -> f32 {
+fn noise1(p: f32) -> f32 {
   let pVal = p+noiseOffset.x;
   let fl = floor(pVal);
   let fc = fract(pVal);
@@ -51,7 +52,7 @@ fn noise(p: f32) -> f32 {
 fn mod289_3(x: vec3<f32>) -> vec3<f32> {return x - floor(x * (1. / 289.)) * 289.;}
 fn permute3(x: vec3<f32>) -> vec3<f32> {return mod289_3(((x * 34.) + 1.) * x);}
 fn noise2(v: vec2<f32>) -> f32 {
-  let v2 = v * .4 + noiseOffset.xy;
+  let v2 = v + noiseOffset.xy;
   let C = vec4(
       0.211324865405187, // (3.0-sqrt(3.0))/6.0
       0.366025403784439, // 0.5*(sqrt(3.0)-1.0)
@@ -90,7 +91,8 @@ fn permute_vec4(x: vec4<f32>) -> vec4<f32> { return mod289_vec4(((x * 34.0) + 1.
 fn taylorInvSqrt_f(r: f32) -> f32 { return 1.79284291400159 - 0.85373472095314 * r; }
 fn taylorInvSqrt_vec4(r: vec4<f32>) -> vec4<f32> { return 1.79284291400159 - 0.85373472095314 * r; }
 
-fn noise3(v: vec3<f32>) -> f32 {
+fn noise3(_v: vec3<f32>) -> f32 {
+  let v = _v + noiseOffset.xyz;
   let C = vec4<f32>(
     0.1381966, // 1/6
     0.2763932, // 1/3
@@ -662,7 +664,7 @@ fn voronoi(uv: vec2<f32>, scale: f32, seed: f32) -> f32 {
               }
           });
 
-          if (/\bnoise2?\s*\(/.test(code)) {
+          if (/\bnoise\s*\(|\bnoise2\s*\(|\bnoise3\s*\(/.test(code)) {
               if (exports.noiseBuffer) bindings.push(exports.noiseBuffer);
           }
 
@@ -2193,9 +2195,9 @@ fn boxNormal(hitPos: vec3<f32>, box: Box) -> vec3<f32> {
     code = code.replace(/\bheight\b/g, exports.height.toFixed(2));
 
     // If code uses noise or noise2, inject the noise function implementation
-    if (/\bnoise2?\s*\(/.test(code)) {
+    if (/\bnoise\s*\(|\bnoise2\s*\(|\bnoise3\s*\(/.test(code)) {
       // Only add if not already present
-      if (!/fn\s+noise\s*\(/.test(code)) {
+      if (!/fn\s+noise\s*\(/.test(code) && !/fn\s+noise2\s*\(/.test(code) && !/fn\s+noise3\s*\(/.test(code)) {
         code = getNoiseCode() + '\n\n' + code;
       }
     }

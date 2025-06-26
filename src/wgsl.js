@@ -357,9 +357,9 @@ export function wgsl(strings, ...values) {
   code = code.replace(/\bheight\b/g, height.toFixed(2));
 
   // If code uses noise or noise2, inject the noise function implementation
-  if (/\bnoise2?\s*\(/.test(code)) {
+  if (/\bnoise\s*\(|\bnoise2\s*\(|\bnoise3\s*\(/.test(code)) {
     // Only add if not already present
-    if (!/fn\s+noise\s*\(/.test(code)) {
+    if (!/fn\s+noise\s*\(/.test(code) && !/fn\s+noise2\s*\(/.test(code) && !/fn\s+noise3\s*\(/.test(code)) {
       code = getNoiseCode() + '\n\n' + code;
     }
   }

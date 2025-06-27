@@ -124,7 +124,6 @@ export default {
   getNoiseCode,
   wgslNoise,
   wgslNoise2,
-  wgslNoise3,
   wgslFBM,
   wgslVoronoi,
   noiseBuffer

@@ -22,18 +22,18 @@ export let canvas, canvasPresentationFormat, ctx;
  */
 export async function initCanvas(options = {}) {
     if (!navigator.gpu) {
-        throw new Error('WebGPU not supported in this browser.');
+        webgpu_notSupported(options, 'WebGPU is not supported in this browser.');
     }
 
     try {
         const adapter = await navigator.gpu?.requestAdapter();
         if (!adapter) {
-            throw new Error('Couldn\'t request WebGPU adapter.');
+            webgpu_notSupported(options, 'Couldn\'t request WebGPU adapter.');
         }
 
         device = await adapter.requestDevice();
         if (!device) {
-            throw new Error('Couldn\'t request WebGPU device.');
+            webgpu_notSupported(options, 'Couldn\'t request WebGPU device.');
         }
 
         // Set up error handling for device
@@ -132,4 +132,33 @@ export async function init(options = {}) {
     if (options.time) createTimeBuffer();
     createRenderPass();
     if (options.feedback) createMatchPass();
+}
+
+
+
+
+function webgpu_notSupported(options, error) {
+    const element = document.createElement('div');
+    element.style = `
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+        background-color: black;
+    `;
+    element.innerText = 'WebGPU is not supported in this browser.';
+    if (options.containerId) {
+        const container = document.getElementById(options.containerId);
+        if (container) {
+            container.appendChild(element);
+        } else {
+            console.warn(`Container with ID '${options.containerId}' not found.`);
+        }
+    } else {
+        document.body.appendChild(element);
+    }
+    return new Error(error)
 }

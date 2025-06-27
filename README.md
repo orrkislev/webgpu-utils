@@ -8,6 +8,14 @@ A comprehensive utility library for WebGPU development with a focus on generativ
 npm install webgpu-utils
 ```
 
+## Getting Started
+
+To help you get started quickly, we provide several starter templates:
+
+- **[CDN Starter](https://orrkislev.github.io/webgpu-utils/_%20starters/cdn)** - Simple HTML file with CDN imports
+- **[ES Module Starter](https://orrkislev.github.io/webgpu-utils/_%20starters/es%20module)** - Modern ES module setup
+- **[Vite Starter](https://orrkislev.github.io/webgpu-utils/_%20starters/vite)** - Basic development environment with Vite
+
 ## Features
 
 - **Rendering Utilities**: Easily create render and compute passes

@@ -1,0 +1,21 @@
+{
+  "name": "webgpu-vite-starter",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A Vite starter project for WebGPU development",
+  "main": "src/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@orrkislev/webgpu-utils": "latest"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "keywords": ["webgpu", "vite", "graphics"],
+  "author": "",
+  "license": "MIT"
+}

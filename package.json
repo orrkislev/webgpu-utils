@@ -6,6 +6,7 @@
   "scripts": {
     "test": "npx jest",
     "build": "npx rollup -c",
+    "dev": "npx rollup -c --watch",
     "prepare": "npm run build"
   },
   "keywords": [

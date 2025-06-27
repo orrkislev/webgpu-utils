@@ -25,7 +25,6 @@
     return `
     ${wgslNoise}
     ${wgslNoise2}
-    ${wgslNoise3}
     `;
   }
 
@@ -80,89 +79,6 @@ fn noise2(v: vec2<f32>) -> f32 {
 }`;
 
   /**
-   * 3D simplex noise implementation for WGSL
-   * @type {string}
-   */
-  const wgslNoise3 = `
-fn mod289_f(x: f32) -> f32 { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-fn mod289_vec3(x: vec3<f32>) -> vec3<f32> { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-fn mod289_vec4(x: vec4<f32>) -> vec4<f32> { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-fn permute_vec4(x: vec4<f32>) -> vec4<f32> { return mod289_vec4(((x * 34.0) + 1.0) * x); }
-fn taylorInvSqrt_f(r: f32) -> f32 { return 1.79284291400159 - 0.85373472095314 * r; }
-fn taylorInvSqrt_vec4(r: vec4<f32>) -> vec4<f32> { return 1.79284291400159 - 0.85373472095314 * r; }
-
-fn noise3(_v: vec3<f32>) -> f32 {
-  let v = _v + noiseOffset.xyz;
-  let C = vec4<f32>(
-    0.1381966, // 1/6
-    0.2763932, // 1/3
-    0.5,
-    -0.5
-  );
-  
-  // First corner
-  var i = floor(v + dot(v, C.yyy));
-  let x0 = v - i + dot(i, C.xxx);
-  
-  // Other corners
-  let g = step(x0.yzx, x0.xyz);
-  let l = 1.0 - g;
-  let i1 = min(g.xyz, l.zxy);
-  let i2 = max(g.xyz, l.zxy);
-  
-  let x1 = x0 - i1 + C.xxx;
-  let x2 = x0 - i2 + C.yyy;
-  let x3 = x0 - 0.5;
-  
-  // Permutations
-  i = mod289_vec3(i); // Avoid truncation effects in permutation
-  let p = permute_vec4(permute_vec4(permute_vec4(
-    i.z + vec4<f32>(0.0, i1.z, i2.z, 1.0))
-    + i.y + vec4<f32>(0.0, i1.y, i2.y, 1.0))
-    + i.x + vec4<f32>(0.0, i1.x, i2.x, 1.0));
-    
-  // Gradients: 7x7 points over a square, mapped onto an octahedron.
-  // The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
-  let j = p - 49.0 * floor(p * (1.0 / 49.0));  // mod(p,7*7)
-  
-  let x_ = floor(j * (1.0 / 7.0));
-  let y_ = floor(j - 7.0 * x_);  // mod(j,N)
-  
-  let x = x_ * (2.0 / 7.0) + 0.5 / 7.0 - 1.0;
-  let y = y_ * (2.0 / 7.0) + 0.5 / 7.0 - 1.0;
-  
-  let h = 1.0 - abs(x) - abs(y);
-  
-  let b0 = vec4<f32>(x.xy, y.xy);
-  let b1 = vec4<f32>(x.zw, y.zw);
-  
-  let s0 = floor(b0) * 2.0 + 1.0;
-  let s1 = floor(b1) * 2.0 + 1.0;
-  let sh = -step(h, vec4<f32>(0.0));
-  
-  let a0 = b0.xzyw + s0.xzyw * sh.xxyy;
-  let a1 = b1.xzyw + s1.xzyw * sh.zzww;
-  
-  var p0 = vec3<f32>(a0.xy, h.x);
-  var p1 = vec3<f32>(a0.zw, h.y);
-  var p2 = vec3<f32>(a1.xy, h.z);
-  var p3 = vec3<f32>(a1.zw, h.w);
-  
-  // Normalise gradients
-  let norm = taylorInvSqrt_vec4(vec4<f32>(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));
-  p0 *= norm.x;
-  p1 *= norm.y;
-  p2 *= norm.z;
-  p3 *= norm.w;
-  
-  // Mix final noise value
-  var m = max(0.6 - vec4<f32>(dot(x0, x0), dot(x1, x1), dot(x2, x2), dot(x3, x3)), vec4<f32>(0.0));
-  m = m * m;
-  return 42.0 * dot(m * m, vec4<f32>(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
-}
-`;
-
-  /**
    * FBM (Fractal Brownian Motion) noise for WGSL
    * @type {string}
    */
@@ -207,6 +123,16 @@ fn voronoi(uv: vec2<f32>, scale: f32, seed: f32) -> f32 {
     return min_dist;
 }
 `;
+
+  ({
+    getNoiseCode,
+    wgslNoise,
+    wgslNoise2,
+    wgslNoise3,
+    wgslFBM,
+    wgslVoronoi,
+    noiseBuffer: exports.noiseBuffer
+  });
 
   /**
    * A WebGPU compatible data structure for defining structured buffers
@@ -946,18 +872,18 @@ fn voronoi(uv: vec2<f32>, scale: f32, seed: f32) -> f32 {
    */
   async function initCanvas(options = {}) {
       if (!navigator.gpu) {
-          throw new Error('WebGPU not supported in this browser.');
+          webgpu_notSupported(options, 'WebGPU is not supported in this browser.');
       }
 
       try {
           const adapter = await navigator.gpu?.requestAdapter();
           if (!adapter) {
-              throw new Error('Couldn\'t request WebGPU adapter.');
+              webgpu_notSupported(options, 'Couldn\'t request WebGPU adapter.');
           }
 
           exports.device = await adapter.requestDevice();
           if (!exports.device) {
-              throw new Error('Couldn\'t request WebGPU device.');
+              webgpu_notSupported(options, 'Couldn\'t request WebGPU device.');
           }
 
           // Set up error handling for device
@@ -1056,6 +982,35 @@ fn voronoi(uv: vec2<f32>, scale: f32, seed: f32) -> f32 {
       if (options.time) createTimeBuffer();
       createRenderPass();
       if (options.feedback) createMatchPass();
+  }
+
+
+
+
+  function webgpu_notSupported(options, error) {
+      const element = document.createElement('div');
+      element.style = `
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+        background-color: black;
+    `;
+      element.innerText = 'WebGPU is not supported in this browser.';
+      if (options.containerId) {
+          const container = document.getElementById(options.containerId);
+          if (container) {
+              container.appendChild(element);
+          } else {
+              console.warn(`Container with ID '${options.containerId}' not found.`);
+          }
+      } else {
+          document.body.appendChild(element);
+      }
+      return new Error(error)
   }
 
   /**
@@ -2295,7 +2250,6 @@ fn boxNormal(hitPos: vec3<f32>, box: Box) -> vec3<f32> {
   exports.wgslFBM = wgslFBM;
   exports.wgslNoise = wgslNoise;
   exports.wgslNoise2 = wgslNoise2;
-  exports.wgslNoise3 = wgslNoise3;
   exports.wgslVoronoi = wgslVoronoi;
   exports.wgsl_material = wgsl_material;
   exports.wgsl_normals = wgsl_normals;

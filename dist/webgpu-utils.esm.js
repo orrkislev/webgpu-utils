@@ -118,16 +118,6 @@ fn voronoi(uv: vec2<f32>, scale: f32, seed: f32) -> f32 {
 }
 `;
 
-({
-  getNoiseCode,
-  wgslNoise,
-  wgslNoise2,
-  wgslNoise3,
-  wgslFBM,
-  wgslVoronoi,
-  noiseBuffer
-});
-
 /**
  * A WebGPU compatible data structure for defining structured buffers
  */

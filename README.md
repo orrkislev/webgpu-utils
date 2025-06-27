@@ -12,9 +12,9 @@ npm install webgpu-utils
 
 To help you get started quickly, we provide several starter templates:
 
-- **[CDN Starter](https://github.com/orrkislev/webgpu-utils/_%20starters/cdn)** - Simple HTML file with CDN imports
-- **[ES Module Starter](https://github.com/orrkislev/webgpu-utils/_%20starters/es%20module)** - Modern ES module setup
-- **[Vite Starter](https://github.com/orrkislev/webgpu-utils/_%20starters/vite)** - Basic development environment with Vite
+- **[CDN Starter](https://github.com/orrkislev/webgpu-utils/tree/main/_%20starters/cdn)** - Simple HTML file with CDN imports
+- **[ES Module Starter](https://github.com/orrkislev/webgpu-utils/tree/main/_%20starters/es%20module)** - Modern ES module setup
+- **[Vite Starter](https://github.com/orrkislev/webgpu-utils/tree/main/_%20starters/vite)** - Basic development environment with Vite
 
 ## Features
 
